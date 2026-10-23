@@ -13,8 +13,8 @@
 'use strict';
 const ENGINES={
 v8:{name:'V8 muscle',cyl:8,idle:750,red:6500,h:[1,.7,.5,.4,.3,.25,.18,.12],lump:.35,rasp:.15,cut:[1000,6000],drive:1.6,gears:[55,95,135,180,225,270],pulse:true},
-v12:{name:'V12 exótico',cyl:12,idle:800,red:8500,h:[1,.6,.6,.5,.45,.4,.3,.25],lump:.05,rasp:.30,cut:[700,6500],drive:2,gears:[65,105,150,195,245,300]},
-f6:{name:'Bóxer 6',cyl:6,idle:850,red:8400,h:[1,.8,.45,.35,.2,.2,.1,.1],lump:.20,rasp:.40,cut:[600,5200],drive:4,gears:[60,100,140,185,230,285]},
+v12:{name:'V12 exótico',cyl:12,idle:800,red:8500,h:[1,.6,.6,.5,.45,.4,.3,.25],lump:.05,rasp:.30,cut:[700,6500],drive:1.4,gears:[65,105,150,195,245,300]},
+f6:{name:'Bóxer 6',cyl:6,idle:850,red:8400,h:[1,.8,.45,.35,.2,.2,.1,.1],lump:.20,rasp:.40,cut:[600,5200],drive:2,gears:[60,100,140,185,230,285]},
 elec:{name:'Eléctrico',cyl:0,idle:0,red:16000,h:[1,.25,.1],lump:0,rasp:0,cut:[1200,5000],drive:0.5,gears:[220],electric:true}
 };
 const S={running:false,mode:'test',engine:'v8',v:0,rpm:0,gear:1,thr:0,brk:0,inThr:0,inBrk:0,gpsSpeed:0,gpsOk:false,gpsPrev:null,watchId:null,demo:false,demoT:0,prevV:0,popCool:0};
@@ -39,6 +39,57 @@ const load=.4+.6*P.thr+.15*P.norm;age[v]=0;env[v]=1;amp[v]=PAT[idx]*(1+(Math.ran
 const f=(85+P.thr*55+P.norm*90)*(BANK[idx]?1.13:1);w1[v]=2*Math.PI*f/sr;dk[v]=Math.exp(-(140+90*P.norm)/sr);}
 let s=0;for(let k=0;k<N;k++){if(age[k]<0)continue;const a=age[k],e=env[k],w=w1[k]*a;s+=amp[k]*e*(Math.sin(w)+.45*Math.sin(2.7*w+1)+.22*Math.sin(5.1*w+2)+(Math.random()*2-1)*.35*e);env[k]=e*dk[k];age[k]=a+1;if(env[k]<.01)age[k]=-1;}out[i]=s*.35;}
 };return proc;}
+// Pulses model exhaust resonances; the electric motor uses smooth motor/inverter orders.
+function makeCharacterProc(){
+  const sr=ctx.sampleRate, tau=2*Math.PI, N=32;
+  const age=new Float32Array(N).fill(-1), gain=new Float32Array(N), tone=new Float32Array(N);
+  let phase=0, index=0, slot=0, rpm=750, throttle=0, key='', rotor=0, carrier=0;
+  let previous=0, dc=0;
+  const proc=ctx.createScriptProcessor(1024,0,1);
+  proc.onaudioprocess=ev=>{
+    const out=ev.outputBuffer.getChannelData(0), e=P.character;
+    if(!P.active || !['v12','f6','elec'].includes(e)){
+      out.fill(0); age.fill(-1); key=''; previous=0; dc=0; return;
+    }
+    if(key!==e){key=e;age.fill(-1);phase=0;index=0;rpm=P.rpm;rotor=0;carrier=0;previous=0;dc=0;}
+    const boxer=e==='f6';
+    for(let i=0;i<out.length;i++){
+      rpm+=(P.rpm-rpm)*.0012; throttle+=(P.thr-throttle)*.0008;
+      let sample=0;
+      if(e==='elec'){
+        const speed=Math.max(0,Math.min(1,rpm/16000));
+        const f=65+speed*1050;
+        rotor=(rotor+tau*f/sr)%tau;carrier=(carrier+tau*(1700+speed*2400)/sr)%tau;
+        const load=.22+.78*throttle;
+        sample=(Math.sin(rotor)*.48+Math.sin(rotor*2)*.18+Math.sin(rotor*3)*.07+Math.sin(carrier+.4*Math.sin(rotor))*.035*load)*Math.min(1,speed*28)*(.3+.7*load);
+      }else{
+        phase+=Math.max(400,rpm)/60*(boxer?3:6)/sr;
+        if(phase>=1){
+          phase-=1;slot=(slot+1)%N;index++;
+          const pattern=boxer?[1,.82,.95,.86,1,.8]:[1,.97,1.02,.98];
+          age[slot]=0;gain[slot]=pattern[index%pattern.length]*(.42+.58*throttle);
+          tone[slot]=(boxer?105:165)+(boxer?110:190)*P.norm;
+        }
+        const decay=(boxer?105:175)+P.norm*110;
+        for(let k=0;k<N;k++){
+          if(age[k]<0)continue;
+          const t=age[k]++/sr, env=(1-Math.exp(-t*4200))*Math.exp(-t*decay), w=tau*tone[k]*t;
+          const body=Math.sin(w)+.42*Math.sin(w*(boxer?2.03:2.7)+.25)+.18*Math.sin(w*(boxer?3.9:5.2)+.8);
+          const breath=(Math.random()*2-1)*Math.exp(-t*800)*(.08+.18*throttle);
+          sample+=gain[k]*env*(body+breath)*(boxer?.48:.4);
+          if(t>.09)age[k]=-1;
+        }
+        // Low engine-order rumble, stronger in the boxer; no sawtooth or square-wave layer.
+        rotor=(rotor+tau*(rpm/60*(boxer?1.5:3))/sr)%tau;
+        sample+=Math.sin(rotor)*(boxer?.10:.045)*(.4+.6*throttle);
+      }
+      // Remove DC before the shared soft saturation and low-pass filter.
+      dc=sample-previous+.995*dc;previous=sample;out[i]=dc;
+    }
+  };
+  return proc;
+}
+
 function makeCurve(k){const n=1024,c=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;c[i]=Math.tanh(x*k)/Math.tanh(k||1);}return c;}
 function waveFor(e){const real=new Float32Array(e.h.length+1),imag=new Float32Array(e.h.length+1);e.h.forEach((w,i)=>imag[i+1]=w);return ctx.createPeriodicWave(real,imag);}
 function noiseBuffer(sec){const b=ctx.createBuffer(1,ctx.sampleRate*sec,ctx.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;return b;}
@@ -55,11 +106,20 @@ const nz=ctx.createBufferSource();nz.buffer=noiseBuffer(2);nz.loop=true;
 const bp=ctx.createBiquadFilter();bp.type='bandpass';bp.frequency.value=1100;bp.Q.value=.7;
 const nG=ctx.createGain();nG.gain.value=0;nz.connect(bp);bp.connect(nG);nG.connect(master);
 const gP=ctx.createGain();gP.gain.value=0;const proc=makePulseProc();proc.connect(gP);gP.connect(shaper);
+const gX=ctx.createGain();gX.gain.value=0;const characterProc=makeCharacterProc();characterProc.connect(gX);gX.connect(shaper);
 master.connect(comp);comp.connect(ctx.destination);[oA,oB,oC,lfo].forEach(o=>o.start());nz.start();
-A={master,shaper,lp,eng,oA,oB,oC,gA,gB,gC,gP,proc,nG,bp,noiseBuf:noiseBuffer(.3)};applyEngine();}
-function applyEngine(){if(!A)return;const e=ENGINES[S.engine];A.oA.setPeriodicWave(waveFor(e));A.shaper.curve=makeCurve(Math.max(.2,e.drive));const pulse=!!e.pulse;A.gP.gain.value=pulse?.9:0;A.gA.gain.value=pulse?0:.55;A.gB.gain.value=pulse?0:e.lump*.5;A.gC.gain.value=pulse?0:e.rasp*.18;}
+A={master,shaper,lp,eng,oA,oB,oC,gA,gB,gC,gP,proc,gX,characterProc,nG,bp,noiseBuf:noiseBuffer(.3)};applyEngine();}
+function applyEngine(){
+if(!A)return;
+const e=ENGINES[S.engine],t=ctx.currentTime;
+A.oA.setPeriodicWave(waveFor(e));A.shaper.curve=makeCurve(Math.max(.2,e.drive));
+A.gP.gain.setTargetAtTime(e.pulse?.9:0,t,.03);
+A.gA.gain.value=0;A.gB.gain.value=0;A.gC.gain.value=0;
+A.gX.gain.setTargetAtTime(e.pulse?0:(e.electric?.6:(S.engine==='f6'?.9:.8)),t,.03);
+P.character=S.engine;P.active=S.running;
+}
 function pop(){if(!A)return;const s=ctx.createBufferSource();s.buffer=A.noiseBuf;const g=ctx.createGain(),f=ctx.createBiquadFilter();f.type='bandpass';f.frequency.value=300+Math.random()*900;f.Q.value=1.5;const t=ctx.currentTime,dur=.04+Math.random()*.06;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.5+Math.random()*.4,t+.005);g.gain.exponentialRampToValueAtTime(.001,t+dur);s.connect(f);f.connect(g);g.connect(A.master);s.start(t);s.stop(t+dur+.02);}
-function updateAudio(){if(!A||!S.running)return;const e=ENGINES[S.engine],t=ctx.currentTime;const norm=e.electric?Math.min(1,S.v/e.gears[0]):Math.max(0,Math.min(1,(S.rpm-e.idle)/(e.red-e.idle)));const f=e.electric?110+norm*1300:Math.max(18,S.rpm/60*e.cyl/2);A.oA.frequency.setTargetAtTime(f,t,.03);A.oB.frequency.setTargetAtTime(f*.5,t,.03);A.oC.frequency.setTargetAtTime(f*2,t,.03);const cutoff=e.cut[0]+(e.cut[1]-e.cut[0])*(.3*norm+.7*S.thr);A.lp.frequency.setTargetAtTime(cutoff,t,.05);P.rpm=S.rpm;P.thr=S.thr;P.norm=norm;P.on=!!e.pulse;const load=e.electric?Math.min(1,.04+S.v/50)*(.45+.55*S.thr):.28+.72*Math.max(S.thr,norm*.55);A.eng.gain.setTargetAtTime(load*.9,t,.04);A.nG.gain.setTargetAtTime(e.electric?0:.01+.10*S.thr*(.3+norm),t,.05);A.bp.frequency.setTargetAtTime(700+norm*1800,t,.1);}
+function updateAudio(){if(!A||!S.running)return;const e=ENGINES[S.engine],t=ctx.currentTime;const norm=e.electric?Math.min(1,S.v/e.gears[0]):Math.max(0,Math.min(1,(S.rpm-e.idle)/(e.red-e.idle)));const f=e.electric?110+norm*1300:Math.max(18,S.rpm/60*e.cyl/2);A.oA.frequency.setTargetAtTime(f,t,.03);A.oB.frequency.setTargetAtTime(f*.5,t,.03);A.oC.frequency.setTargetAtTime(f*2,t,.03);const cutoff=e.cut[0]+(e.cut[1]-e.cut[0])*(.3*norm+.7*S.thr);A.lp.frequency.setTargetAtTime(cutoff,t,.05);P.rpm=S.rpm;P.thr=S.thr;P.norm=norm;P.on=!!e.pulse;P.character=S.engine;P.active=S.running;const load=e.electric?Math.min(1,.04+S.v/50)*(.45+.55*S.thr):.28+.72*Math.max(S.thr,norm*.55);A.eng.gain.setTargetAtTime(load*.9,t,.04);A.nG.gain.setTargetAtTime(e.electric?0:(e.pulse?.01+.10*S.thr*(.3+norm):.006+.035*S.thr*(.3+norm)),t,.05);A.bp.frequency.setTargetAtTime(700+norm*1800,t,.1);}
 function demoInput(t){if(t<1.5)return[0,0];if(t<2.1)return[.9,0];if(t<2.7)return[0,0];if(t<3.4)return[1,0];if(t<4.5)return[0,0];if(t<16)return[1,0];if(t<18)return[.1,0];if(t<22)return[0,.8];if(t<24)return[0,0];if(t<30)return[.6,0];if(t<33)return[0,.9];return null;}
 function step(dt){const e=ENGINES[S.engine],top=e.gears[e.gears.length-1];let inThr=S.inThr,inBrk=S.inBrk;if(S.demo){S.demoT+=dt;const d=demoInput(S.demoT);if(!d){stopDemo();}else{inThr=d[0];inBrk=d[1];}}const revOn=$('revHold').checked||S.demo;
 if(S.mode==='test'||S.demo){S.thr+=(inThr-S.thr)*Math.min(1,dt*6);S.brk+=(inBrk-S.brk)*Math.min(1,dt*10);const v=S.v;let a=S.thr*26*(1-v/(top*1.02))-.0025*v-S.brk*38-(S.thr<.05&&v>0?2.2:0);S.v=Math.max(0,Math.min(top,v+a*dt));}else{const target=S.gpsOk?S.gpsSpeed:0;S.v+=(target-S.v)*Math.min(1,dt*2);const acc=(S.v-S.prevV)/Math.max(dt,.001);let thrT=Math.max(0,Math.min(1,acc/8));if(S.v>5&&thrT<.12)thrT=.12;const brkT=Math.max(0,Math.min(1,-acc/10));if(S.v<3&&revOn)thrT=inThr;S.thr+=(thrT-S.thr)*Math.min(1,dt*4);S.brk+=(brkT-S.brk)*Math.min(1,dt*4);}S.prevV=S.v;
@@ -71,7 +131,7 @@ function startGps(){if(!navigator.geolocation){gpsStatus(false,'GPS no disponibl
 function stopGps(){try{if(S.watchId!=null)navigator.geolocation.clearWatch(S.watchId);}catch(_){}S.watchId=null;S.gpsOk=false;S.gpsPrev=null;gpsStatus(false,'GPS apagado');}
 function gpsStatus(on,txt){$('dGps').classList.toggle('on',on);$('tGps').textContent=txt;}
 let wakeLock=null;async function start(){initAudio();await ctx.resume();S.running=true;try{if('wakeLock'in navigator)wakeLock=await navigator.wakeLock.request('screen');}catch(_){}$('btnStart').textContent='Parar motor';$('btnStart').classList.add('running');$('dEng').classList.add('on');$('tEng').textContent='Motor encendido';if(S.mode==='gps')startGps();S.rpm=ENGINES[S.engine].idle;}
-function stop(){S.running=false;P.on=false;stopDemo();if(A){A.eng.gain.setTargetAtTime(0,ctx.currentTime,.05);A.nG.gain.setTargetAtTime(0,ctx.currentTime,.05);}if(wakeLock){wakeLock.release().catch(()=>{});wakeLock=null;}stopGps();S.v=0;S.rpm=0;S.thr=0;S.brk=0;$('btnStart').textContent='Arrancar motor';$('btnStart').classList.remove('running');$('dEng').classList.remove('on');$('tEng').textContent='Motor apagado';}
+function stop(){S.running=false;P.on=false;P.active=false;stopDemo();if(A){A.eng.gain.setTargetAtTime(0,ctx.currentTime,.05);A.nG.gain.setTargetAtTime(0,ctx.currentTime,.05);}if(wakeLock){wakeLock.release().catch(()=>{});wakeLock=null;}stopGps();S.v=0;S.rpm=0;S.thr=0;S.brk=0;$('btnStart').textContent='Arrancar motor';$('btnStart').classList.remove('running');$('dEng').classList.remove('on');$('tEng').textContent='Motor apagado';}
 $('btnStart').onclick=()=>S.running?stop():start();
 function setMode(m){S.mode=m;$('mTest').classList.toggle('sel',m==='test');$('mGps').classList.toggle('sel',m==='gps');if(m==='gps'){if(S.running)startGps();}else stopGps();S.v=0;}
 $('mTest').onclick=()=>setMode('test');$('mGps').onclick=()=>setMode('gps');
