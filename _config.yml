@@ -1,0 +1,4 @@
+# Archived source stays in GitHub but must not be served by GitHub Pages.
+exclude:
+  - versions
+  - README.md
