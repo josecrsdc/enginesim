@@ -7,8 +7,9 @@
 @media(min-width:1200px){body{padding-top:40px}}@media(max-width:650px){body{padding-top:18px}.mast{margin-bottom:22px}.garage{align-items:center;gap:8px}.garage h1{font-size:28px}.garage p{font-size:11px}.engine-select{min-width:130px;max-width:145px;font-size:12px;padding:10px}.cockpit{padding:17px 14px;border-radius:24px}.instruments{gap:2px;min-height:230px;grid-template-columns:minmax(0,1fr) minmax(100px,.65fr) minmax(55px,.35fr)}.gear-block{padding-left:8px}.gear{font-size:44px}.gear-block p{font-size:8px}.speed-value{font-size:70px;letter-spacing:-5px}.speed .micro{font-size:8px}.drive-mode{margin-top:17px;padding:5px;font-size:8px}.dial-label{font-size:14px}.rpm-digital{font-size:16px;bottom:19%}.rpm-digital small{font-size:6px}.panel-top{font-size:8px;letter-spacing:1px}.panel-top strong{font-size:9px}.shift-lights{gap:3px}.shift-lights i{width:4px}.controls{grid-template-columns:1fr;gap:12px;margin-top:14px}.control-box{padding:15px}.control-heading{margin-bottom:12px}.pedal{height:84px}.status{font-size:9px;gap:9px}.cluster-footer .micro{font-size:8px;letter-spacing:1px}.foot{font-size:9px;gap:12px}[data-engine=f6] .instruments{grid-template-columns:minmax(75px,.65fr) minmax(0,1fr) minmax(55px,.4fr);min-height:230px}[data-engine=f6] .gear-block{padding:8px 0}[data-engine=f6] .gear{font-size:32px}[data-engine=f6] .gear-block .micro{font-size:7px;letter-spacing:0}[data-engine=f6] .gear-block p{display:none}[data-engine=f6] .speed .micro{display:none}[data-engine=f6] .speed-value{font-size:40px}[data-engine=f6] .speed-unit{font-size:8px;letter-spacing:1px}[data-engine=f6] .drive-mode{margin-top:8px;font-size:6px}[data-engine=f6] .cockpit{border-radius:32px 32px 20px 20px}[data-engine=elec] .speed-value{font-size:80px}[data-engine=elec] .rpm-digital{bottom:35%}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 .mast-tools{display:flex;align-items:center;gap:12px}.presence-badge{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:var(--mut);white-space:nowrap}.presence-badge:before{content:'';width:6px;height:6px;flex:none;border-radius:50%;background:#687380}.presence-badge[data-online=true]:before{background:var(--ok);box-shadow:0 0 7px #6adc9d55}span.version{display:inline-flex;align-items:center;border:1px solid #363d48;border-radius:8px;color:var(--mut);background:#191e25;font:11px ui-monospace,monospace}.foot-note{white-space:nowrap}@media(max-width:650px){.mast-tools{flex-direction:column;align-items:flex-end;gap:6px}.presence-badge{font-size:10px}.mast{align-items:flex-start}.foot-note{display:none}}
+.feedback{display:grid;grid-template-columns:1.2fr 1fr;gap:30px;margin-top:18px}.feedback h2{font-size:24px;letter-spacing:-.7px;margin:8px 0}.feedback p,.usage-choice small{font-size:12px;color:var(--mut);line-height:1.6}.feedback strong{color:var(--txt)}.rating-stars{display:flex;gap:4px;margin:12px 0}.rating-stars button{font-size:30px;line-height:1;padding:5px 8px;min-width:44px;color:var(--acc);background:transparent;border-color:transparent}.rating-stars button[aria-pressed=true]{border-color:var(--acc)}#submitRating{font-size:12px}button:disabled{opacity:.45;cursor:default}.usage-choice{border-left:1px solid var(--line);padding-left:26px;align-self:center}.usage-choice label{display:flex;align-items:center;gap:9px;font-size:13px}.usage-choice input{accent-color:var(--acc);width:18px;height:18px;flex:none}.usage-choice small{display:block;font-size:10px}#ratingMessage{min-height:38px;margin-bottom:0}@media(max-width:650px){.feedback{grid-template-columns:1fr;gap:20px}.usage-choice{border-left:0;border-top:1px solid var(--line);padding:18px 0 0}.rating-stars button{padding:5px 9px}}
 </style></head><body><main>
-<header class="mast"><div class="brand">ENGINE<span>SIM</span><small>EL SONIDO DE CONDUCIR</small></div><div class="mast-tools"><span id="onlineCount" class="presence-badge" data-online="false" role="status" title="Sesiones con esta página visible. Recuento aproximado, no personas únicas.">Conectando…</span><span class="version" aria-label="Versión publicada">v0.3.1</span></div></header>
+<header class="mast"><div class="brand">ENGINE<span>SIM</span><small>EL SONIDO DE CONDUCIR</small></div><div class="mast-tools"><span id="onlineCount" class="presence-badge" data-online="false" role="status" title="Sesiones con esta página visible. Recuento aproximado, no personas únicas.">Conectando…</span><span class="version" aria-label="Versión publicada">v0.4.0</span></div></header>
 <section class="garage"><div><div class="eyebrow">TU GARAJE VIRTUAL</div><h1 id="engineTitle">American Muscle</h1><p id="engineSubtitle">Ocho cilindros. Todo carácter.</p></div><select id="selEngine" class="engine-select" aria-label="Motor"></select></section>
 <section class="cockpit" aria-label="Cuadro de instrumentos"><div class="panel-top"><span id="clusterLabel">ANALOG SERIES / 08</span><strong id="driveLabel">V8 · CROSSPLANE</strong><span class="electric-only">◈ ELECTRIC DRIVE</span></div>
 <div class="instruments"><div class="dial"><svg viewBox="0 0 300 300" aria-hidden="true"><circle class="dial-track" cx="150" cy="150" r="112" stroke-dasharray="528 704" transform="rotate(135 150 150)"/><circle class="dial-progress" id="dialArc" cx="150" cy="150" r="112" stroke-dasharray="0 704" transform="rotate(135 150 150)"/><g id="dialTicks"></g><text class="dial-caption" x="150" y="111" id="dialCaption">RPM × 1000</text><g id="dialNeedle" transform="rotate(-135 150 150)"><line class="needle" x1="150" y1="164" x2="150" y2="56"/></g><circle class="hub" cx="150" cy="150" r="8"/></svg><div class="rpm-digital"><span id="vRpm">0</span><small id="rpmUnit">REVOLUCIONES / MIN</small></div></div>
@@ -17,7 +18,8 @@
 <div class="cluster-footer"><div class="status"><span><i class="dot" id="dEng"></i><span id="tEng">Motor apagado</span></span><span><i class="dot" id="dGps"></i><span id="tGps">GPS apagado</span></span></div><span class="micro">ENGINE SOUND SYSTEM</span></div><div class="bar"><i id="rpmBar"></i></div></section>
 <section class="controls" aria-label="Controles de conducción"><div class="control-box"><div class="control-heading"><span class="micro">ENCENDIDO Y AUDIO</span><div class="seg"><button id="mTest" class="sel">Test</button><button id="mGps">GPS</button></div></div><div class="ignition-row"><button class="primary" id="btnStart">Arrancar motor</button><button id="btnDemo">▶ Demo</button></div><label class="volume">Volumen<input type="range" id="vol" min="0" max="1" step="0.01" value="0.6"></label><div class="settings"><label><input type="checkbox" id="revHold" checked>Acelerar en parado</label><label><input type="checkbox" id="autoplay" checked>Recordar motor</label></div></div>
 <div class="control-box"><div class="control-heading"><span class="micro">PEDALERA</span><span class="micro">MANTÉN PULSADO</span></div><div class="pedals"><button type="button" class="pedal" id="pBrk"><i id="iBrk"></i><span>FRENO<small>↓ / S</small></span></button><button type="button" class="pedal" id="pThr"><i id="iThr"></i><span>ACELERADOR<small>↑ / W</small></span></button></div><p class="hint" id="modeHint">Test: usa los pedales o el teclado. Demo: escucha una conducción simulada.</p></div></section>
-<footer class="foot"><p>Sonido sintetizado · Gratis y sin registro. En modo GPS, permite la ubicación y mantén la página abierta. Configúralo antes de conducir y usa un volumen que permita oír el tráfico.</p><span class="foot-note">ENGINE SIM · v0.3.1</span></footer></main>
+<section class="feedback control-box" aria-label="Valora el sonido"><div><div class="eyebrow">AYUDA A AFINAR EL GARAJE</div><h2>¿Cómo suena?</h2><p>Tu opinión sobre <strong id="ratingEngine">este motor</strong> nos ayuda a mejorar.</p><form id="ratingForm"><div class="rating-stars" role="group" aria-label="Puntuación del motor"><button type="button" data-rating-score="1" aria-label="1 estrella" aria-pressed="false">☆</button><button type="button" data-rating-score="2" aria-label="2 estrellas" aria-pressed="false">☆</button><button type="button" data-rating-score="3" aria-label="3 estrellas" aria-pressed="false">☆</button><button type="button" data-rating-score="4" aria-label="4 estrellas" aria-pressed="false">☆</button><button type="button" data-rating-score="5" aria-label="5 estrellas" aria-pressed="false">☆</button></div><button type="submit" id="submitRating" disabled>Enviar valoración</button><p id="ratingMessage" aria-live="polite">Elige de 1 a 5 estrellas después de escucharlo.</p></form></div><div class="usage-choice"><label><input type="checkbox" id="shareUsage">Compartir estadísticas de uso</label><p id="usageNote"></p><small>Las valoraciones se guardan al enviarlas. Las estadísticas solo si las activas. No se envía tu ubicación. Gratis y sin cuenta.</small></div></section>
+<footer class="foot"><p>Sonido sintetizado · Gratis y sin registro. En modo GPS, permite la ubicación y mantén la página abierta. Configúralo antes de conducir y usa un volumen que permita oír el tráfico.</p><span class="foot-note">ENGINE SIM · v0.4.0</span></footer></main>
 <script>
 'use strict';
 const ENGINES={
@@ -252,4 +254,49 @@ startPresence(document.getElementById('onlineCount'), {
   url: 'https://ddyztvtbxiajhfodqmhp.supabase.co',
   publishableKey: 'sb_publishable_J9z9Tely6RfDrrRxAfOkfw_fTBnsIh_'
 });
+</script><script type="module">
+const INGEST_URL='https://ddyztvtbxiajhfodqmhp.supabase.co/functions/v1/enginesim-ingest';
+const INGEST_KEY='sb_publishable_J9z9Tely6RfDrrRxAfOkfw_fTBnsIh_';
+const APP_VERSION='v0.4.0';
+let token;
+const sessionToken=()=>token||(token=Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join(''));
+async function postMetric(payload,keepalive=false){
+const response=await fetch(INGEST_URL,{method:'POST',headers:{'Content-Type':'application/json',apikey:INGEST_KEY},body:JSON.stringify({...payload,token:sessionToken(),version:APP_VERSION}),keepalive});
+if(!response.ok)throw new Error(response.status===429?'rate_limit':'unavailable');
+}
+const consent=document.getElementById('shareUsage'),consentNote=document.getElementById('usageNote');
+let enabled=false;try{enabled=localStorage.getItem('enginesim.statsConsent')==='yes';}catch{}
+consent.checked=enabled;
+const consentText=()=>{consentNote.textContent=enabled?'Activadas: se comparten sesiones, tiempo visible y motores en uso. Sin ubicación.':'Desactivadas. Puedes ayudar compartiendo sesiones, tiempo de uso y motores, sin ubicación.';};
+consentText();
+let started=false,lastSample=performance.now(),pendingMs=0,pendingEngine=null,busy=false;
+const queue=[];
+function enqueue(payload){if(queue.length<40)queue.push(payload);void drain();}
+async function drain(keepalive=false){if(busy||!enabled||!navigator.onLine)return;busy=true;try{while(queue.length&&enabled){await postMetric(queue[0],keepalive);queue.shift();}}catch{}finally{busy=false;}}
+function flush(keepalive=false){
+const seconds=Math.min(30,Math.floor(pendingMs/1000));if(!enabled||seconds<1)return;pendingMs-=seconds*1000;
+const payload={kind:'usage',event_id:crypto.randomUUID(),engine:pendingEngine,seconds};
+if(keepalive){void postMetric(payload,true).catch(()=>{});void drain(true);}else enqueue(payload);
+}
+function sample(){
+const now=performance.now(),elapsed=Math.min(2000,Math.max(0,now-lastSample));lastSample=now;
+if(!enabled||document.hidden)return;
+if(!started){started=true;enqueue({kind:'start',event_id:crypto.randomUUID(),engine:null,seconds:0});}
+const engine=S.running?S.engine:null;
+if(engine!==pendingEngine){flush();pendingMs=0;pendingEngine=engine;}
+pendingMs+=elapsed;if(pendingMs>=30000)flush();
+}
+consent.addEventListener('change',()=>{enabled=consent.checked;pendingMs=0;lastSample=performance.now();if(!enabled)queue.length=0;try{localStorage.setItem('enginesim.statsConsent',enabled?'yes':'no');}catch{}consentText();if(enabled)sample();});
+const votes=new Map();let chosen=0,ratingEngine=S.engine,sending=false;
+const form=document.getElementById('ratingForm'),message=document.getElementById('ratingMessage'),submit=document.getElementById('submitRating');
+const stars=Array.from(document.querySelectorAll('[data-rating-score]'));
+function paintStars(){for(const star of stars){const value=Number(star.dataset.ratingScore);star.textContent=value<=chosen?'★':'☆';star.setAttribute('aria-pressed',String(value===chosen));}submit.disabled=chosen===0||sending;submit.textContent=votes.has(ratingEngine)?'Actualizar valoración':'Enviar valoración';}
+function refreshRating(){const engine=S.engine;if(engine!==ratingEngine){ratingEngine=engine;chosen=votes.get(engine)||0;message.textContent=chosen?'Ya has valorado este motor en esta sesión. Puedes cambiar tu voto.':'Elige de 1 a 5 estrellas después de escucharlo.';paintStars();}document.getElementById('ratingEngine').textContent=ENGINES[engine].name;}
+for(const star of stars)star.addEventListener('click',()=>{chosen=Number(star.dataset.ratingScore);paintStars();});
+form.addEventListener('submit',async event=>{event.preventDefault();if(!chosen||sending)return;const engine=ratingEngine,score=chosen;sending=true;paintStars();message.textContent='Guardando valoración…';try{await postMetric({kind:'rating',engine,score});votes.set(engine,score);if(ratingEngine===engine)message.textContent='Gracias. Tu valoración se ha guardado. Puedes actualizarla durante esta sesión.';}catch(error){if(ratingEngine===engine)message.textContent=error.message==='rate_limit'?'Has enviado muchas valoraciones. Inténtalo más tarde.':'No se ha podido guardar. Comprueba la conexión y vuelve a intentarlo.';}finally{sending=false;paintStars();}});
+document.getElementById('selEngine').addEventListener('change',()=>{sample();refreshRating();});
+setInterval(()=>{sample();refreshRating();},1000);setInterval(()=>void drain(),10000);
+document.addEventListener('visibilitychange',()=>{sample();if(document.hidden)flush(true);});
+window.addEventListener('pagehide',()=>{sample();flush(true);});window.addEventListener('online',()=>void drain());
+paintStars();refreshRating();sample();
 </script></body></html>
