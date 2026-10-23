@@ -9,7 +9,7 @@
 .mast-tools{display:flex;align-items:center;gap:12px}.presence-badge{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:var(--mut);white-space:nowrap}.presence-badge:before{content:'';width:6px;height:6px;flex:none;border-radius:50%;background:#687380}.presence-badge[data-online=true]:before{background:var(--ok);box-shadow:0 0 7px #6adc9d55}span.version{display:inline-flex;align-items:center;border:1px solid #363d48;border-radius:8px;color:var(--mut);background:#191e25;font:11px ui-monospace,monospace}.foot-note{white-space:nowrap}@media(max-width:650px){.mast-tools{flex-direction:column;align-items:flex-end;gap:6px}.presence-badge{font-size:10px}.mast{align-items:flex-start}.foot-note{display:none}}
 .feedback{display:grid;grid-template-columns:1.2fr 1fr;gap:30px;margin-top:18px}.feedback h2{font-size:24px;letter-spacing:-.7px;margin:8px 0}.feedback p,.usage-choice small{font-size:12px;color:var(--mut);line-height:1.6}.feedback strong{color:var(--txt)}.rating-stars{display:flex;gap:4px;margin:12px 0}.rating-stars button{font-size:30px;line-height:1;padding:5px 8px;min-width:44px;color:var(--acc);background:transparent;border-color:transparent}.rating-stars button[aria-pressed=true]{border-color:var(--acc)}#submitRating{font-size:12px}button:disabled{opacity:.45;cursor:default}.usage-choice{border-left:1px solid var(--line);padding-left:26px;align-self:center}.usage-choice label{display:flex;align-items:center;gap:9px;font-size:13px}.usage-choice input{accent-color:var(--acc);width:18px;height:18px;flex:none}.usage-choice small{display:block;font-size:10px}#ratingMessage{min-height:38px;margin-bottom:0}@media(max-width:650px){.feedback{grid-template-columns:1fr;gap:20px}.usage-choice{border-left:0;border-top:1px solid var(--line);padding:18px 0 0}.rating-stars button{padding:5px 9px}}
 .pedal small{font-size:8px;letter-spacing:.5px}.pedal{cursor:ns-resize}#audioStatus{min-height:18px}</style></head><body><main>
-<header class="mast"><div class="brand">ENGINE<span>SIM</span><small>EL SONIDO DE CONDUCIR</small></div><div class="mast-tools"><span id="onlineCount" class="presence-badge" data-online="false" role="status" title="Sesiones con esta página visible. Recuento aproximado, no personas únicas.">Conectando…</span><span class="version" aria-label="Versión publicada">v0.5.0</span></div></header>
+<header class="mast"><div class="brand">ENGINE<span>SIM</span><small>EL SONIDO DE CONDUCIR</small></div><div class="mast-tools"><span id="onlineCount" class="presence-badge" data-online="false" role="status" title="Sesiones con esta página visible. Recuento aproximado, no personas únicas.">Conectando…</span><span class="version" aria-label="Versión publicada">v0.6.0</span></div></header>
 <section class="garage"><div><div class="eyebrow">TU GARAJE VIRTUAL</div><h1 id="engineTitle">American Muscle</h1><p id="engineSubtitle">Ocho cilindros. Todo carácter.</p></div><select id="selEngine" class="engine-select" aria-label="Motor"></select></section>
 <section class="cockpit" aria-label="Cuadro de instrumentos"><div class="panel-top"><span id="clusterLabel">ANALOG SERIES / 08</span><strong id="driveLabel">V8 · CROSSPLANE</strong><span class="electric-only">◈ ELECTRIC DRIVE</span></div>
 <div class="instruments"><div class="dial"><svg viewBox="0 0 300 300" aria-hidden="true"><circle class="dial-track" cx="150" cy="150" r="112" stroke-dasharray="528 704" transform="rotate(135 150 150)"/><circle class="dial-progress" id="dialArc" cx="150" cy="150" r="112" stroke-dasharray="0 704" transform="rotate(135 150 150)"/><g id="dialTicks"></g><text class="dial-caption" x="150" y="111" id="dialCaption">RPM × 1000</text><g id="dialNeedle" transform="rotate(-135 150 150)"><line class="needle" x1="150" y1="164" x2="150" y2="56"/></g><circle class="hub" cx="150" cy="150" r="8"/></svg><div class="rpm-digital"><span id="vRpm">0</span><small id="rpmUnit">REVOLUCIONES / MIN</small></div></div>
@@ -19,7 +19,7 @@
 <section class="controls" aria-label="Controles de conducción"><div class="control-box"><div class="control-heading"><span class="micro">ENCENDIDO Y AUDIO</span><div class="seg"><button id="mTest" class="sel">Test</button><button id="mGps">GPS</button></div></div><div class="ignition-row"><button class="primary" id="btnStart">Arrancar motor</button><button id="btnDemo">▶ Demo</button></div><label class="volume">Volumen<input type="range" id="vol" min="0" max="1" step="0.01" value="0.6"></label><p class="hint" id="audioStatus" aria-live="polite">Audio con grabaciones · listo al arrancar</p><div class="settings"><label><input type="checkbox" id="revHold" checked>Acelerar en parado</label><label><input type="checkbox" id="autoplay" checked>Recordar motor</label></div></div>
 <div class="control-box"><div class="control-heading"><span class="micro">PEDALERA</span><span class="micro">PULSA MÁS ABAJO = MÁS GAS</span></div><div class="pedals"><button type="button" class="pedal" id="pBrk"><i id="iBrk"></i><span>FRENO<small>↓ / S</small></span></button><button type="button" class="pedal" id="pThr"><i id="iThr"></i><span>ACELERADOR<small>SUAVE ARRIBA · A FONDO ABAJO</small></span></button></div><p class="hint" id="modeHint">Test: pulsa más abajo en el pedal para acelerar más. ↑ / W: a fondo · Mayús + ↑: suave.</p></div></section>
 <section class="feedback control-box" aria-label="Valora el sonido"><div><div class="eyebrow">AYUDA A AFINAR EL GARAJE</div><h2>¿Cómo suena?</h2><p>Tu opinión sobre <strong id="ratingEngine">este motor</strong> nos ayuda a mejorar.</p><form id="ratingForm"><div class="rating-stars" role="group" aria-label="Puntuación del motor"><button type="button" data-rating-score="1" aria-label="1 estrella" aria-pressed="false">☆</button><button type="button" data-rating-score="2" aria-label="2 estrellas" aria-pressed="false">☆</button><button type="button" data-rating-score="3" aria-label="3 estrellas" aria-pressed="false">☆</button><button type="button" data-rating-score="4" aria-label="4 estrellas" aria-pressed="false">☆</button><button type="button" data-rating-score="5" aria-label="5 estrellas" aria-pressed="false">☆</button></div><button type="submit" id="submitRating" disabled>Enviar valoración</button><p id="ratingMessage" aria-live="polite">Elige de 1 a 5 estrellas después de escucharlo.</p></form></div><div class="usage-choice"><strong>Estadísticas de uso activas</strong><p>Se registran sesiones, tiempo visible y motores en uso para mejorar EngineSim.</p><small>No se envía tu ubicación. Las valoraciones se guardan al enviarlas. Gratis y sin cuenta.</small></div></section>
-<footer class="foot"><p>Audio con grabaciones CC0 y simulación · Gratis y sin registro. En modo GPS, permite la ubicación y mantén la página abierta. Configúralo antes de conducir y usa un volumen que permita oír el tráfico.</p><span class="foot-note">ENGINE SIM · v0.5.0</span></footer></main>
+<footer class="foot"><p>Audio con grabaciones CC0 y simulación · Gratis y sin registro. En modo GPS, permite la ubicación y mantén la página abierta. Configúralo antes de conducir y usa un volumen que permita oír el tráfico.</p><span class="foot-note">ENGINE SIM · v0.6.0</span></footer></main>
 <script>
 'use strict';
 const ENGINES={
@@ -102,67 +102,29 @@ function makeCharacterProc(){
 }
 
 let sampleRig=null;
-class RecordedEngine{
-  constructor(context,output){this.context=context;this.output=output;this.ready=false;this.layers=[];this.voices=new Set();this.epoch=0;}
+class PhysicalAudio {
+  constructor(context,output){this.context=context;this.output=output;this.ready=false;this.rig=null;}
   async load(){
-    const status=$('audioStatus');status.textContent='Cargando grabaciones del motor…';
+    $('audioStatus').textContent='Preparando motor y escape…';
     try{
-      const response=await fetch('./engine-bank-v1.json');if(!response.ok)throw Error('audio bank unavailable');
-      const bank=await response.json();
-      const decode=async data=>this.context.decodeAudioData(Uint8Array.from(atob(data),c=>c.charCodeAt(0)).buffer);
-      const entries=await Promise.all(bank.loops.map(async clip=>({...clip,buffer:await decode(clip.data)})));
-      this.popBuffer=await decode(bank.backfire.data);
-      for(const clip of entries){
-        const source=this.context.createBufferSource(),gain=this.context.createGain();
-        source.buffer=clip.buffer;source.loop=true;source.loopStart=clip.loopStart;source.loopEnd=clip.loopEnd;
-        gain.gain.value=0;source.connect(gain);gain.connect(this.output);source.start(0,clip.loopStart);
-        this.layers.push({...clip,source,gain});
-      }
-      this.ready=true;status.textContent='Grabaciones listas · cambios y retención dinámicos';
-    }catch{status.textContent='Grabaciones no disponibles. Audio de respaldo activo; recarga para reintentar.';}
+      const {PhysicalEngine}=await import('./physical-engine.js');
+      this.rig=new PhysicalEngine(this.context,this.output);await this.rig.load();this.ready=true;
+      $('audioStatus').textContent='Audio continuo · encendido por cilindros y escape dinámico';
+    }catch(error){console.warn('Audio físico no disponible',error);$('audioStatus').textContent='Audio clásico de respaldo activo · recarga para reintentar';}
   }
-  mute(){
-    const now=this.context.currentTime;
-    for(const layer of this.layers)layer.gain.gain.setTargetAtTime(0,now,.025);
-    for(const voice of this.voices){try{voice.stop();}catch{}}
-    this.voices.clear();this.epoch++;
-  }
+  mute(){this.rig?.mute();}
   update(){
-    const now=this.context.currentTime,e=ENGINES[S.engine],rpm=Math.max(e.idle,S.rpm);
-    const layers=this.layers.filter(layer=>layer.engine===S.engine).sort((a,b)=>a.rpm-b.rpm);
-    const log=Math.log(rpm);let low=layers[0],high=layers[layers.length-1];
-    for(let i=0;i<layers.length-1;i++)if(rpm>=layers[i].rpm&&rpm<layers[i+1].rpm){low=layers[i];high=layers[i+1];break;}
-    if(rpm<=layers[0].rpm)high=low=layers[0];if(rpm>=layers.at(-1).rpm)high=low=layers.at(-1);
-    const blend=low===high?0:clamp((log-Math.log(low.rpm))/(Math.log(high.rpm)-Math.log(low.rpm)),0,1);
-    const shiftCut=S.shiftTime>0?.28:1;
-    const limiter=rpm>e.red*.985?(Math.floor(now*24)%2?.25:1):1;
-    const load=(.30+.70*S.thr)*(S.brk>.3?.75:1)*shiftCut*limiter;
-    for(const layer of this.layers){
-      let weight=0;
-      if(layer===low)weight=low===high?1:Math.cos(blend*Math.PI/2);
-      else if(layer===high)weight=Math.sin(blend*Math.PI/2);
-      // Only local pitch offsets: adjacent recordings crossfade instead of stretching one idle loop across the whole range.
-      layer.source.playbackRate.setTargetAtTime(clamp(rpm/layer.rpm,.55,2.2),now,.045);
-      layer.gain.gain.setTargetAtTime(S.running?weight*load*.68:0,now,.035);
-    }
+    try{if(this.rig.failed)throw Error('Audio processor failed');this.rig.update(S,ENGINES[S.engine]);}
+    catch(error){this.mute();this.ready=false;$('audioStatus').textContent='Audio clásico de respaldo activo · recarga para reintentar';console.warn(error);}
   }
-  pop(strength,delay=0){
-    if(!this.ready||!this.popBuffer||this.voices.size>=6)return;
-    const source=this.context.createBufferSource(),gain=this.context.createGain(),filter=this.context.createBiquadFilter();
-    source.buffer=this.popBuffer;source.playbackRate.value=.88+Math.random()*.30;
-    filter.type='highpass';filter.frequency.value=90;source.connect(filter);filter.connect(gain);gain.connect(this.output);
-    const now=this.context.currentTime+delay;gain.gain.setValueAtTime(0,now);gain.gain.linearRampToValueAtTime(strength*.65,now+.003);gain.gain.exponentialRampToValueAtTime(.0001,now+.19);
-    this.voices.add(source);source.onended=()=>{this.voices.delete(source);source.disconnect();filter.disconnect();gain.disconnect();};source.start(now);source.stop(now+.23);
-  }
+  pop(strength,delay){this.rig?.pop(strength,delay);}
 }
-
-function makeCurve(k){const n=1024,c=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;c[i]=Math.tanh(x*k)/Math.tanh(k||1);}return c;}
 function waveFor(e){const real=new Float32Array(e.h.length+1),imag=new Float32Array(e.h.length+1);e.h.forEach((w,i)=>imag[i+1]=w);return ctx.createPeriodicWave(real,imag);}
 function noiseBuffer(sec){const b=ctx.createBuffer(1,ctx.sampleRate*sec,ctx.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;return b;}
 function initAudio(){
 if(ctx)return;ctx=new(window.AudioContext||window.webkitAudioContext)();
 const master=ctx.createGain();master.gain.value=+$('vol').value;
-const comp=ctx.createDynamicsCompressor(),shaper=ctx.createWaveShaper();shaper.oversample='2x';
+const comp=ctx.createDynamicsCompressor(),shaper=ctx.createWaveShaper();comp.threshold.value=-12;comp.knee.value=8;comp.ratio.value=4;comp.attack.value=.004;comp.release.value=.16;shaper.oversample='2x';
 const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.Q.value=1.1;
 const eng=ctx.createGain();eng.gain.value=0;
 const oA=ctx.createOscillator(),oB=ctx.createOscillator(),oC=ctx.createOscillator();oB.type='sawtooth';oC.type='square';
@@ -173,8 +135,8 @@ const bp=ctx.createBiquadFilter();bp.type='bandpass';bp.frequency.value=1100;bp.
 const nG=ctx.createGain();nG.gain.value=0;nz.connect(bp);bp.connect(nG);nG.connect(master);
 const gP=ctx.createGain();gP.gain.value=0;const proc=makePulseProc();proc.connect(gP);gP.connect(shaper);
 const gX=ctx.createGain();gX.gain.value=0;const characterProc=makeCharacterProc();characterProc.connect(gX);gX.connect(shaper);
-master.connect(comp);comp.connect(ctx.destination);[oA,oB,oC,lfo].forEach(o=>o.start());nz.start();
-A={master,comp,shaper,lp,eng,oA,oB,oC,gA,gB,gC,gP,proc,gX,characterProc,nG,bp,noiseBuf:noiseBuffer(.3)};applyEngine();sampleRig=new RecordedEngine(ctx,master);void sampleRig.load();}
+const safety=ctx.createWaveShaper(),curve=new Float32Array(4097);for(let i=0;i<curve.length;i++){const x=i*2/(curve.length-1)-1;curve[i]=.92*Math.tanh(x/.92);}safety.curve=curve;safety.oversample='2x';master.connect(comp);comp.connect(safety);safety.connect(ctx.destination);[oA,oB,oC,lfo].forEach(o=>o.start());nz.start();
+A={master,comp,shaper,lp,eng,oA,oB,oC,gA,gB,gC,gP,proc,gX,characterProc,nG,bp,noiseBuf:noiseBuffer(.3)};applyEngine();sampleRig=new PhysicalAudio(ctx,master);void sampleRig.load();}
 function applyEngine(){
 if(!A)return;
 const e=ENGINES[S.engine],t=ctx.currentTime;if(sampleRig)sampleRig.mute();
@@ -382,7 +344,7 @@ startPresence(document.getElementById('onlineCount'), {
 </script><script type="module">
 const INGEST_URL='https://ddyztvtbxiajhfodqmhp.supabase.co/functions/v1/enginesim-ingest';
 const INGEST_KEY='sb_publishable_J9z9Tely6RfDrrRxAfOkfw_fTBnsIh_';
-const APP_VERSION='v0.5.0';
+const APP_VERSION='v0.6.0';
 let token;
 const sessionToken=()=>token||(token=Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join(''));
 async function postMetric(payload,keepalive=false){
