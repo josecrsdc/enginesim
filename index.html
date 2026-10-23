@@ -6,8 +6,9 @@
 [data-engine=elec]{--acc:#74e5e0;--glow:#74e5e028}[data-engine=elec] .cockpit{border-radius:20px;background:linear-gradient(150deg,#152129,#0b1119);border-color:#30434d}[data-engine=elec] .dial{background:none;box-shadow:none;max-width:230px;opacity:.8}[data-engine=elec] .needle,[data-engine=elec] .hub{display:none}[data-engine=elec] .speed-value{font-size:clamp(92px,12vw,150px);font-weight:200}[data-engine=elec] .drive-mode{border:0}[data-engine=elec] .electric-only{display:inline}[data-engine=elec] .gear-block{border:0}[data-engine=elec] .gear{font-size:50px;color:#d0dddd}[data-engine=elec] .rpm-digital{bottom:35%}
 @media(min-width:1200px){body{padding-top:40px}}@media(max-width:650px){body{padding-top:18px}.mast{margin-bottom:22px}.garage{align-items:center;gap:8px}.garage h1{font-size:28px}.garage p{font-size:11px}.engine-select{min-width:130px;max-width:145px;font-size:12px;padding:10px}.cockpit{padding:17px 14px;border-radius:24px}.instruments{gap:2px;min-height:230px;grid-template-columns:minmax(0,1fr) minmax(100px,.65fr) minmax(55px,.35fr)}.gear-block{padding-left:8px}.gear{font-size:44px}.gear-block p{font-size:8px}.speed-value{font-size:70px;letter-spacing:-5px}.speed .micro{font-size:8px}.drive-mode{margin-top:17px;padding:5px;font-size:8px}.dial-label{font-size:14px}.rpm-digital{font-size:16px;bottom:19%}.rpm-digital small{font-size:6px}.panel-top{font-size:8px;letter-spacing:1px}.panel-top strong{font-size:9px}.shift-lights{gap:3px}.shift-lights i{width:4px}.controls{grid-template-columns:1fr;gap:12px;margin-top:14px}.control-box{padding:15px}.control-heading{margin-bottom:12px}.pedal{height:84px}.status{font-size:9px;gap:9px}.cluster-footer .micro{font-size:8px;letter-spacing:1px}.foot{font-size:9px;gap:12px}[data-engine=f6] .instruments{grid-template-columns:minmax(75px,.65fr) minmax(0,1fr) minmax(55px,.4fr);min-height:230px}[data-engine=f6] .gear-block{padding:8px 0}[data-engine=f6] .gear{font-size:32px}[data-engine=f6] .gear-block .micro{font-size:7px;letter-spacing:0}[data-engine=f6] .gear-block p{display:none}[data-engine=f6] .speed .micro{display:none}[data-engine=f6] .speed-value{font-size:40px}[data-engine=f6] .speed-unit{font-size:8px;letter-spacing:1px}[data-engine=f6] .drive-mode{margin-top:8px;font-size:6px}[data-engine=f6] .cockpit{border-radius:32px 32px 20px 20px}[data-engine=elec] .speed-value{font-size:80px}[data-engine=elec] .rpm-digital{bottom:35%}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+.mast-tools{display:flex;align-items:center;gap:12px}.presence-badge{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:var(--mut);white-space:nowrap}.presence-badge:before{content:'';width:6px;height:6px;flex:none;border-radius:50%;background:#687380}.presence-badge[data-online=true]:before{background:var(--ok);box-shadow:0 0 7px #6adc9d55}span.version{display:inline-flex;align-items:center;border:1px solid #363d48;border-radius:8px;color:var(--mut);background:#191e25;font:11px ui-monospace,monospace}.foot-note{white-space:nowrap}@media(max-width:650px){.mast-tools{flex-direction:column;align-items:flex-end;gap:6px}.presence-badge{font-size:10px}.mast{align-items:flex-start}.foot-note{display:none}}
 </style></head><body><main>
-<header class="mast"><div class="brand">ENGINE<span>SIM</span><small>EL SONIDO DE CONDUCIR</small></div><select id="versionSelect" class="version" aria-label="Versión"><option value="">v0.3.0 · Cockpit</option><option value="versions/v0.2.0.html">v0.2.0 · Clásica</option></select></header>
+<header class="mast"><div class="brand">ENGINE<span>SIM</span><small>EL SONIDO DE CONDUCIR</small></div><div class="mast-tools"><span id="onlineCount" class="presence-badge" data-online="false" role="status" title="Sesiones con esta página visible. Recuento aproximado, no personas únicas.">Conectando…</span><span class="version" aria-label="Versión publicada">v0.3.1</span></div></header>
 <section class="garage"><div><div class="eyebrow">TU GARAJE VIRTUAL</div><h1 id="engineTitle">American Muscle</h1><p id="engineSubtitle">Ocho cilindros. Todo carácter.</p></div><select id="selEngine" class="engine-select" aria-label="Motor"></select></section>
 <section class="cockpit" aria-label="Cuadro de instrumentos"><div class="panel-top"><span id="clusterLabel">ANALOG SERIES / 08</span><strong id="driveLabel">V8 · CROSSPLANE</strong><span class="electric-only">◈ ELECTRIC DRIVE</span></div>
 <div class="instruments"><div class="dial"><svg viewBox="0 0 300 300" aria-hidden="true"><circle class="dial-track" cx="150" cy="150" r="112" stroke-dasharray="528 704" transform="rotate(135 150 150)"/><circle class="dial-progress" id="dialArc" cx="150" cy="150" r="112" stroke-dasharray="0 704" transform="rotate(135 150 150)"/><g id="dialTicks"></g><text class="dial-caption" x="150" y="111" id="dialCaption">RPM × 1000</text><g id="dialNeedle" transform="rotate(-135 150 150)"><line class="needle" x1="150" y1="164" x2="150" y2="56"/></g><circle class="hub" cx="150" cy="150" r="8"/></svg><div class="rpm-digital"><span id="vRpm">0</span><small id="rpmUnit">REVOLUCIONES / MIN</small></div></div>
@@ -16,7 +17,7 @@
 <div class="cluster-footer"><div class="status"><span><i class="dot" id="dEng"></i><span id="tEng">Motor apagado</span></span><span><i class="dot" id="dGps"></i><span id="tGps">GPS apagado</span></span></div><span class="micro">ENGINE SOUND SYSTEM</span></div><div class="bar"><i id="rpmBar"></i></div></section>
 <section class="controls" aria-label="Controles de conducción"><div class="control-box"><div class="control-heading"><span class="micro">ENCENDIDO Y AUDIO</span><div class="seg"><button id="mTest" class="sel">Test</button><button id="mGps">GPS</button></div></div><div class="ignition-row"><button class="primary" id="btnStart">Arrancar motor</button><button id="btnDemo">▶ Demo</button></div><label class="volume">Volumen<input type="range" id="vol" min="0" max="1" step="0.01" value="0.6"></label><div class="settings"><label><input type="checkbox" id="revHold" checked>Acelerar en parado</label><label><input type="checkbox" id="autoplay" checked>Recordar motor</label></div></div>
 <div class="control-box"><div class="control-heading"><span class="micro">PEDALERA</span><span class="micro">MANTÉN PULSADO</span></div><div class="pedals"><button type="button" class="pedal" id="pBrk"><i id="iBrk"></i><span>FRENO<small>↓ / S</small></span></button><button type="button" class="pedal" id="pThr"><i id="iThr"></i><span>ACELERADOR<small>↑ / W</small></span></button></div><p class="hint" id="modeHint">Test: usa los pedales o el teclado. Demo: escucha una conducción simulada.</p></div></section>
-<footer class="foot"><p>Sonido sintetizado · Gratis y sin registro. En modo GPS, permite la ubicación y mantén la página abierta. Configúralo antes de conducir y usa un volumen que permita oír el tráfico.</p><a href="versions/v0.2.0.html">Volver a la interfaz clásica ↗</a></footer></main>
+<footer class="foot"><p>Sonido sintetizado · Gratis y sin registro. En modo GPS, permite la ubicación y mantén la página abierta. Configúralo antes de conducir y usa un volumen que permita oír el tráfico.</p><span class="foot-note">ENGINE SIM · v0.3.1</span></footer></main>
 <script>
 'use strict';
 const ENGINES={
@@ -179,7 +180,76 @@ $('modeReadout').textContent=S.demo?'DEMO RUN':S.mode==='gps'?'GPS DRIVE':'TEST 
 $('modeHint').textContent=S.mode==='gps'?'GPS: el sonido sigue tu velocidad real. En parado puedes revolucionar el motor con el acelerador.':'Test: usa los pedales o el teclado. Demo: escucha una conducción simulada.';
 for(const [i,light]of Array.from($('shiftLights').children).entries())light.classList.toggle('lit',S.running&&ratio>(i+1)/8);
 }
-$('versionSelect').onchange=e=>{if(e.target.value){stop();location.href=e.target.value;}};
 addEventListener('blur',()=>{S.inThr=0;S.inBrk=0;});
 
+</script><script type="module">
+// Presence only: no database writes, GPS coordinates, engine selections, or names.
+function mountPresence(client, view, events = window, page = document) {
+  const channel = client.channel('enginesim:online:v1');
+  let disposed = false, connected = false, tracked = false, generation = 0;
+  const status = (text, online = false) => {
+    if (!disposed) { view.textContent = text; view.dataset.online = String(online); }
+  };
+  const sync = () => {
+    if (!connected || !tracked || disposed) return;
+    const count = Object.values(channel.presenceState()).filter(items => items.some(item => item.active === true)).length;
+    status(count === 0 ? 'Conectando…' : count === 1 ? '1 sesión activa' : count + ' sesiones activas', count > 0);
+  };
+  const updateVisibility = async () => {
+    const request = ++generation;
+    tracked = false;
+    if (!connected || disposed) return;
+    if (page.hidden) {
+      status('Contador en pausa');
+      await channel.untrack().catch(() => {});
+      return;
+    }
+    status('Conectando…');
+    try {
+      const result = await channel.track({ active: true });
+      if (disposed || request !== generation || !connected || page.hidden) return;
+      if (result !== 'ok') { status('En directo no disponible'); return; }
+      tracked = true; sync();
+    } catch { if (request === generation) status('En directo no disponible'); }
+  };
+  const offline = () => { connected = false; tracked = false; generation++; status('Sin conexión'); };
+  const leave = () => {
+    tracked = false; connected = false; generation++;
+    channel.untrack().catch(() => {}); status('Desconectado');
+  };
+  channel.on('presence', { event: 'sync' }, sync).subscribe(async state => {
+    if (disposed) return;
+    connected = state === 'SUBSCRIBED'; tracked = false;
+    if (connected) await updateVisibility();
+    else { generation++; status('En directo no disponible'); }
+  });
+  page.addEventListener('visibilitychange', updateVisibility);
+  events.addEventListener('offline', offline);
+  events.addEventListener('pagehide', leave);
+  const resume = event => { if (event.persisted) events.location.reload(); };
+  events.addEventListener('pageshow', resume);
+  return () => {
+    disposed = true; generation++;
+    page.removeEventListener('visibilitychange', updateVisibility);
+    events.removeEventListener('offline', offline);
+    events.removeEventListener('pagehide', leave);
+    events.removeEventListener('pageshow', resume);
+    client.removeChannel(channel).catch(() => {});
+  };
+}
+async function startPresence(view, config) {
+  if (!view || !config?.url || !config?.publishableKey) return;
+  view.textContent = 'Conectando…';
+  try {
+    const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/+esm');
+    const client = createClient(config.url, config.publishableKey, {
+      auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+    });
+    return mountPresence(client, view);
+  } catch { view.textContent = 'En directo no disponible'; view.dataset.online = 'false'; }
+}
+startPresence(document.getElementById('onlineCount'), {
+  url: 'https://ddyztvtbxiajhfodqmhp.supabase.co',
+  publishableKey: 'sb_publishable_J9z9Tely6RfDrrRxAfOkfw_fTBnsIh_'
+});
 </script></body></html>
