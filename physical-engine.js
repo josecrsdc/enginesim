@@ -28,9 +28,10 @@ export class PhysicalEngine {
   update(s,e){
     this.select(s.engine);
     const g=this.current,now=this.ctx.currentTime;
-    const norm=clamp((s.rpm-e.idle)/(e.red-e.idle),0,1),load=clamp(s.thr,0,1);
+    const norm=clamp((s.rpm-e.idle)/(e.red-e.idle),0,1);
+    const blip=clamp((s.revBlip||0)/.30,0,1),load=clamp(Math.max(s.thr,.62*Math.sin(blip*Math.PI)),0,1);
     const overrun=load<.04&&s.rpm>e.idle*1.6?1:0;
-    const shifting=s.shiftTime>0;
+    const shifting=s.shiftTime>0&&s.shiftDirection>0;
     const p={now,dt:1/60,load,throttle:load,rpmNorm:norm,overrun,rpm:s.rpm};
     g.exhaust.update(p);g.intake.update(p);
     const params={f0:Math.max(e.idle,s.rpm)/120,load,amp:(.40+.60*load)*(overrun?.48:1)*(shifting?.36:1),rough:0,ripple:crankRipple(g.profile,s.rpm,load),low:1-norm};
@@ -50,7 +51,7 @@ export class PhysicalEngine {
     const ctx=this.ctx,n=Math.round(ctx.sampleRate*.035),buffer=ctx.createBuffer(1,n,ctx.sampleRate),d=buffer.getChannelData(0);
     const decay=.005+Math.random()*.004;
     for(let i=0;i<n;i++){const t=i/ctx.sampleRate;d[i]=(1-Math.exp(-t/.0004))*Math.exp(-t/decay)*(Math.cos(2*Math.PI*110*t)+.3*(Math.random()*2-1));}
-    const voice=ctx.createBufferSource(),gain=ctx.createGain();voice.buffer=buffer;gain.gain.value=clamp(strength,0,.6)*.7;
+    const voice=ctx.createBufferSource(),gain=ctx.createGain();voice.buffer=buffer;gain.gain.value=clamp(strength,0,.6)*1.1;
     voice.connect(gain);gain.connect(g.exhaust.collectorNode);this.voices.add(voice);
     voice.onended=()=>{this.voices.delete(voice);voice.disconnect();gain.disconnect();};voice.start(ctx.currentTime+delay);
   }
@@ -61,3 +62,4 @@ export class PhysicalEngine {
     setTimeout(()=>{g.node.port.postMessage('stop');g.node.disconnect();g.exhaust.dispose();g.intake.dispose();for(const n of [g.bus,g.hp,g.lp,g.gain])n.disconnect();},80);
   }
 }
+
