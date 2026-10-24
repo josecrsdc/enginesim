@@ -9,7 +9,7 @@
 .mast-tools{display:flex;align-items:center;gap:12px}.presence-badge{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:var(--mut);white-space:nowrap}.presence-badge:before{content:'';width:6px;height:6px;flex:none;border-radius:50%;background:#687380}.presence-badge[data-online=true]:before{background:var(--ok);box-shadow:0 0 7px #6adc9d55}span.version{display:inline-flex;align-items:center;border:1px solid #363d48;border-radius:8px;color:var(--mut);background:#191e25;font:11px ui-monospace,monospace}.foot-note{white-space:nowrap}@media(max-width:650px){.mast-tools{flex-direction:column;align-items:flex-end;gap:6px}.presence-badge{font-size:10px}.mast{align-items:flex-start}.foot-note{display:none}}
 .feedback{display:grid;grid-template-columns:1.2fr 1fr;gap:30px;margin-top:18px}.feedback h2{font-size:24px;letter-spacing:-.7px;margin:8px 0}.feedback p,.usage-choice small{font-size:12px;color:var(--mut);line-height:1.6}.feedback strong{color:var(--txt)}.rating-stars{display:flex;gap:4px;margin:12px 0}.rating-stars button{font-size:30px;line-height:1;padding:5px 8px;min-width:44px;color:var(--acc);background:transparent;border-color:transparent}.rating-stars button[aria-pressed=true]{border-color:var(--acc)}#submitRating{font-size:12px}button:disabled{opacity:.45;cursor:default}.usage-choice{border-left:1px solid var(--line);padding-left:26px;align-self:center}.usage-choice label{display:flex;align-items:center;gap:9px;font-size:13px}.usage-choice input{accent-color:var(--acc);width:18px;height:18px;flex:none}.usage-choice small{display:block;font-size:10px}#ratingMessage{min-height:38px;margin-bottom:0}@media(max-width:650px){.feedback{grid-template-columns:1fr;gap:20px}.usage-choice{border-left:0;border-top:1px solid var(--line);padding:18px 0 0}.rating-stars button{padding:5px 9px}}
 .pedal small{font-size:8px;letter-spacing:.5px}.pedal{cursor:ns-resize}#audioStatus{min-height:18px}</style></head><body><main>
-<header class="mast"><div class="brand">ENGINE<span>SIM</span><small>EL SONIDO DE CONDUCIR</small></div><div class="mast-tools"><span id="onlineCount" class="presence-badge" data-online="false" role="status" title="Sesiones con esta página visible. Recuento aproximado, no personas únicas.">Conectando…</span><span class="version" aria-label="Versión publicada">v0.7.1</span></div></header>
+<header class="mast"><div class="brand">ENGINE<span>SIM</span><small>EL SONIDO DE CONDUCIR</small></div><div class="mast-tools"><span id="onlineCount" class="presence-badge" data-online="false" role="status" title="Sesiones con esta página visible. Recuento aproximado, no personas únicas.">Conectando…</span><span class="version" aria-label="Versión publicada">v0.7.2</span></div></header>
 <section class="garage"><div><div class="eyebrow">TU GARAJE VIRTUAL</div><h1 id="engineTitle">American Muscle</h1><p id="engineSubtitle">Ocho cilindros. Todo carácter.</p></div><select id="selEngine" class="engine-select" aria-label="Motor"></select></section>
 <section class="cockpit" aria-label="Cuadro de instrumentos"><div class="panel-top"><span id="clusterLabel">ANALOG SERIES / 08</span><strong id="driveLabel">V8 · CROSSPLANE</strong><span class="electric-only">◈ ELECTRIC DRIVE</span></div>
 <div class="instruments"><div class="dial"><svg viewBox="0 0 300 300" aria-hidden="true"><circle class="dial-track" cx="150" cy="150" r="112" stroke-dasharray="528 704" transform="rotate(135 150 150)"/><circle class="dial-progress" id="dialArc" cx="150" cy="150" r="112" stroke-dasharray="0 704" transform="rotate(135 150 150)"/><g id="dialTicks"></g><text class="dial-caption" x="150" y="111" id="dialCaption">RPM × 1000</text><g id="dialNeedle" transform="rotate(-135 150 150)"><line class="needle" x1="150" y1="164" x2="150" y2="56"/></g><circle class="hub" cx="150" cy="150" r="8"/></svg><div class="rpm-digital"><span id="vRpm">0</span><small id="rpmUnit">REVOLUCIONES / MIN</small></div></div>
@@ -19,7 +19,7 @@
 <section class="controls" aria-label="Controles de conducción"><div class="control-box"><div class="control-heading"><span class="micro">ENCENDIDO Y AUDIO</span><div class="seg"><button id="mTest" class="sel">Test</button><button id="mGps">GPS</button></div></div><div class="ignition-row"><button class="primary" id="btnStart">Arrancar motor</button><button id="btnDemo">▶ Demo</button></div><label class="volume">Volumen<input type="range" id="vol" min="0" max="1" step="0.01" value="0.6"></label><p class="hint" id="audioStatus" aria-live="polite">Audio continuo · listo al arrancar</p><p id="gpsDetail" class="muted" role="status" aria-live="polite" hidden></p><button id="retryGps" type="button" hidden>Reintentar GPS</button><div class="settings"><label><input type="checkbox" id="revHold" checked>Acelerar en parado</label><label><input type="checkbox" id="autoplay" checked>Recordar motor</label></div></div>
 <div class="control-box"><div class="control-heading"><span class="micro">PEDALERA</span><span class="micro">PULSA MÁS ABAJO = MÁS GAS</span></div><div class="pedals"><button type="button" class="pedal" id="pBrk"><i id="iBrk"></i><span>FRENO<small>↓ / S</small></span></button><button type="button" class="pedal" id="pThr"><i id="iThr"></i><span>ACELERADOR<small>SUAVE ARRIBA · A FONDO ABAJO</small></span></button></div><p class="hint" id="modeHint">Test: pulsa más abajo en el pedal para acelerar más. ↑ / W: a fondo · Mayús + ↑: suave.</p></div></section>
 <section class="feedback control-box" aria-label="Valora el sonido"><div><div class="eyebrow">AYUDA A AFINAR EL GARAJE</div><h2>¿Cómo suena?</h2><p>Tu opinión sobre <strong id="ratingEngine">este motor</strong> nos ayuda a mejorar.</p><form id="ratingForm"><div class="rating-stars" role="group" aria-label="Puntuación del motor"><button type="button" data-rating-score="1" aria-label="1 estrella" aria-pressed="false">☆</button><button type="button" data-rating-score="2" aria-label="2 estrellas" aria-pressed="false">☆</button><button type="button" data-rating-score="3" aria-label="3 estrellas" aria-pressed="false">☆</button><button type="button" data-rating-score="4" aria-label="4 estrellas" aria-pressed="false">☆</button><button type="button" data-rating-score="5" aria-label="5 estrellas" aria-pressed="false">☆</button></div><button type="submit" id="submitRating" disabled>Enviar valoración</button><p id="ratingMessage" aria-live="polite">Elige de 1 a 5 estrellas después de escucharlo.</p></form></div><div class="usage-choice"><strong>Estadísticas de uso activas</strong><p>Se registran sesiones, tiempo visible y motores en uso para mejorar EngineSim.</p><small>No se envía tu ubicación. Las valoraciones se guardan al enviarlas. Gratis y sin cuenta.</small></div></section>
-<footer class="foot"><p>Simulación de motor y escape · Gratis y sin registro. En modo GPS, permite la ubicación y mantén la página abierta. Configúralo antes de conducir y usa un volumen que permita oír el tráfico.</p><span class="foot-note">ENGINE SIM · v0.7.1</span></footer></main>
+<footer class="foot"><p>Simulación de motor y escape · Gratis y sin registro. En modo GPS, permite la ubicación y mantén la página abierta. Configúralo antes de conducir y usa un volumen que permita oír el tráfico.</p><span class="foot-note">ENGINE SIM · v0.7.2</span></footer></main>
 <script>
 'use strict';
 const ENGINES={
@@ -250,6 +250,23 @@ function gpsStatus(on,txt,detail=''){
   $('dGps').classList.toggle('on',on);$('tGps').textContent=txt;
   $('gpsDetail').textContent=detail;$('gpsDetail').hidden=S.mode!=='gps';$('retryGps').hidden=S.mode!=='gps';
 }
+function gpsDeniedHelp(){
+  const ua=(typeof navigator.userAgent==='string'?navigator.userAgent:''),touchMac=/Macintosh/.test(ua)&&navigator.maxTouchPoints>1;
+  if(/iPhone|iPad|iPod/.test(ua)||touchMac)return 'Safari tiene la ubicación denegada para esta web. 1) Ajustes › Privacidad y seguridad › Localización: activa Localización y, en «Sitios web de Safari», elige «Al usar la app». 2) En Safari toca «aA» junto a la dirección › Ajustes del sitio web › Ubicación › Permitir. 3) Vuelve aquí y pulsa Reintentar GPS.';
+  if(/Android/.test(ua))return 'El navegador tiene la ubicación denegada para esta web. Toca el icono junto a la dirección › Permisos › Ubicación › Permitir, activa la ubicación del teléfono y pulsa Reintentar GPS.';
+  if(/Tesla|QtCar/i.test(ua))return 'El navegador del coche ha denegado la ubicación. Revisa el permiso de ubicación del sitio en el navegador y pulsa Reintentar GPS.';
+  return 'Permite la ubicación para esta web (icono junto a la dirección › Permisos › Ubicación) y pulsa Reintentar GPS.';
+}
+let gpsPermWatch=null;
+function watchGpsPermission(){
+  try{
+    if(gpsPermWatch||!navigator.permissions||!navigator.permissions.query)return;
+    navigator.permissions.query({name:'geolocation'}).then(st=>{
+      gpsPermWatch=st;
+      st.onchange=()=>{if(st.state==='granted'&&S.mode==='gps'&&!S.gpsOk)startGps(true);};
+    }).catch(()=>{});
+  }catch{}
+}
 function refreshGps(){
   if(S.gpsOk&&performance.now()-S.gpsLastAt>GPS_FRESH_MS){S.gpsOk=false;S.gpsAccel=0;gpsStatus(false,'GPS sin datos recientes','La última velocidad ha caducado. Esperando ubicación; puedes pulsar Reintentar GPS.');}
 }
@@ -290,13 +307,14 @@ function startGps(force=false){
   stopGps(false);
   if(!navigator.geolocation){gpsStatus(false,'GPS no disponible','Este navegador no ofrece ubicación. Prueba abrir la web directamente en el navegador del dispositivo.');return;}
   if(window.isSecureContext===false){gpsStatus(false,'GPS requiere HTTPS','Abre la dirección https://josecrsdc.github.io/enginesim/');return;}
+  watchGpsPermission();
   const generation=gpsGeneration;
   gpsStatus(false,'Buscando GPS…','Permite el acceso a la ubicación. La primera lectura puede tardar unos segundos.');
   try{
     S.watchId=navigator.geolocation.watchPosition(p=>{if(generation===gpsGeneration&&S.mode==='gps')receiveGps(p);},err=>{
       if(generation!==gpsGeneration)return;
       S.gpsOk=false;S.gpsAccel=0;
-      const messages={1:['Ubicación bloqueada','Permite la ubicación para esta web en el navegador y pulsa Reintentar GPS.'],2:['Ubicación no disponible','El dispositivo no ha podido obtener una posición. Esperando señal; puedes reintentar.'],3:['GPS: esperando señal','No ha llegado una posición a tiempo. La búsqueda continúa; puedes reintentar.']};
+      const messages={1:['Ubicación bloqueada',gpsDeniedHelp()],2:['Ubicación no disponible','El dispositivo no ha podido obtener una posición. Esperando señal; puedes reintentar.'],3:['GPS: esperando señal','No ha llegado una posición a tiempo. La búsqueda continúa; puedes reintentar.']};
       const [title,detail]=messages[err.code]||['GPS no disponible','Pulsa Reintentar GPS para volver a solicitar ubicación.'];gpsStatus(false,title,detail);
     },{enableHighAccuracy:true,maximumAge:0,timeout:20000});
   }catch{gpsStatus(false,'GPS bloqueado en este navegador','Abre la web directamente, permite la ubicación y pulsa Reintentar GPS.');}
@@ -438,7 +456,7 @@ startPresence(document.getElementById('onlineCount'), {
 </script><script type="module">
 const INGEST_URL='https://ddyztvtbxiajhfodqmhp.supabase.co/functions/v1/enginesim-ingest';
 const INGEST_KEY='sb_publishable_J9z9Tely6RfDrrRxAfOkfw_fTBnsIh_';
-const APP_VERSION='v0.7.1';
+const APP_VERSION='v0.7.2';
 let token;
 const sessionToken=()=>token||(token=Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join(''));
 async function postMetric(payload,keepalive=false){

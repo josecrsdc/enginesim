@@ -38,6 +38,11 @@ callbacks.at(-1).ok(skewed(20));assert.ok(S.gpsOk,'fix with one-hour clock offse
 now+=1000;callbacks.at(-1).ok(skewed(25));assert.equal(S.gpsSpeed,90);
 // ...but a cached fix far older than the learned baseline is still rejected.
 now+=1000;callbacks.at(-1).ok({...skewed(10),timestamp:epoch+now-3600000-60000});assert.equal(S.gpsSpeed,90,'cached stale fix ignored');
+// Denied permission (iPhone Safari): title stays 'bloqueada' and the detail explains the exact steps; retry still works.
+scope.navigator.userAgent='Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Safari/604.1';
+t.startGps(true);callbacks.at(-1).error({code:1});assert.match(el('tGps').textContent,/bloqueada/);assert.match(el('gpsDetail').textContent,/Ajustes del sitio web/);assert.match(el('gpsDetail').textContent,/Safari/);
+t.startGps(true);callbacks.at(-1).ok(position(10));assert.ok(S.gpsOk,'GPS recovers after permission is granted');
+scope.navigator.userAgent='Mozilla/5.0 (Linux; Android 14) Chrome/130';t.startGps(true);callbacks.at(-1).error({code:1});assert.match(el('gpsDetail').textContent,/Permisos/);delete scope.navigator.userAgent;
 // Some devices report speed=0 while positions move: require consecutive evidence before overriding zero.
 t.startGps(true);callbacks.at(-1).ok(position(0,40));now+=1000;callbacks.at(-1).ok(position(0,40.00018));assert.equal(S.gpsSpeed,0);now+=1000;callbacks.at(-1).ok(position(0,40.00036));assert.ok(S.gpsSpeed>60);
 const speedBefore=S.gpsSpeed;callbacks.at(-1).ok({...position(80),timestamp:epoch+now-1000});assert.equal(S.gpsSpeed,speedBefore,'ignore reordered fix');
