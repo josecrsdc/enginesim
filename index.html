@@ -9,7 +9,7 @@
 .mast-tools{display:flex;align-items:center;gap:12px}.presence-badge{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:var(--mut);white-space:nowrap}.presence-badge:before{content:'';width:6px;height:6px;flex:none;border-radius:50%;background:#687380}.presence-badge[data-online=true]:before{background:var(--ok);box-shadow:0 0 7px #6adc9d55}span.version{display:inline-flex;align-items:center;border:1px solid #363d48;border-radius:8px;color:var(--mut);background:#191e25;font:11px ui-monospace,monospace}.foot-note{white-space:nowrap}@media(max-width:650px){.mast-tools{flex-direction:column;align-items:flex-end;gap:6px}.presence-badge{font-size:10px}.mast{align-items:flex-start}.foot-note{display:none}}
 .feedback{display:grid;grid-template-columns:1.2fr 1fr;gap:30px;margin-top:18px}.feedback h2{font-size:24px;letter-spacing:-.7px;margin:8px 0}.feedback p,.usage-choice small{font-size:12px;color:var(--mut);line-height:1.6}.feedback strong{color:var(--txt)}.rating-stars{display:flex;gap:4px;margin:12px 0}.rating-stars button{font-size:30px;line-height:1;padding:5px 8px;min-width:44px;color:var(--acc);background:transparent;border-color:transparent}.rating-stars button[aria-pressed=true]{border-color:var(--acc)}#submitRating{font-size:12px}button:disabled{opacity:.45;cursor:default}.usage-choice{border-left:1px solid var(--line);padding-left:26px;align-self:center}.usage-choice label{display:flex;align-items:center;gap:9px;font-size:13px}.usage-choice input{accent-color:var(--acc);width:18px;height:18px;flex:none}.usage-choice small{display:block;font-size:10px}#ratingMessage{min-height:38px;margin-bottom:0}@media(max-width:650px){.feedback{grid-template-columns:1fr;gap:20px}.usage-choice{border-left:0;border-top:1px solid var(--line);padding:18px 0 0}.rating-stars button{padding:5px 9px}}
 .pedal small{font-size:8px;letter-spacing:.5px}.pedal{cursor:ns-resize}#audioStatus{min-height:18px}</style></head><body><main>
-<header class="mast"><div class="brand">ENGINE<span>SIM</span><small>EL SONIDO DE CONDUCIR</small></div><div class="mast-tools"><span id="onlineCount" class="presence-badge" data-online="false" role="status" title="Sesiones con esta página visible. Recuento aproximado, no personas únicas.">Conectando…</span><span class="version" aria-label="Versión publicada">v0.7.0</span></div></header>
+<header class="mast"><div class="brand">ENGINE<span>SIM</span><small>EL SONIDO DE CONDUCIR</small></div><div class="mast-tools"><span id="onlineCount" class="presence-badge" data-online="false" role="status" title="Sesiones con esta página visible. Recuento aproximado, no personas únicas.">Conectando…</span><span class="version" aria-label="Versión publicada">v0.7.1</span></div></header>
 <section class="garage"><div><div class="eyebrow">TU GARAJE VIRTUAL</div><h1 id="engineTitle">American Muscle</h1><p id="engineSubtitle">Ocho cilindros. Todo carácter.</p></div><select id="selEngine" class="engine-select" aria-label="Motor"></select></section>
 <section class="cockpit" aria-label="Cuadro de instrumentos"><div class="panel-top"><span id="clusterLabel">ANALOG SERIES / 08</span><strong id="driveLabel">V8 · CROSSPLANE</strong><span class="electric-only">◈ ELECTRIC DRIVE</span></div>
 <div class="instruments"><div class="dial"><svg viewBox="0 0 300 300" aria-hidden="true"><circle class="dial-track" cx="150" cy="150" r="112" stroke-dasharray="528 704" transform="rotate(135 150 150)"/><circle class="dial-progress" id="dialArc" cx="150" cy="150" r="112" stroke-dasharray="0 704" transform="rotate(135 150 150)"/><g id="dialTicks"></g><text class="dial-caption" x="150" y="111" id="dialCaption">RPM × 1000</text><g id="dialNeedle" transform="rotate(-135 150 150)"><line class="needle" x1="150" y1="164" x2="150" y2="56"/></g><circle class="hub" cx="150" cy="150" r="8"/></svg><div class="rpm-digital"><span id="vRpm">0</span><small id="rpmUnit">REVOLUCIONES / MIN</small></div></div>
@@ -19,7 +19,7 @@
 <section class="controls" aria-label="Controles de conducción"><div class="control-box"><div class="control-heading"><span class="micro">ENCENDIDO Y AUDIO</span><div class="seg"><button id="mTest" class="sel">Test</button><button id="mGps">GPS</button></div></div><div class="ignition-row"><button class="primary" id="btnStart">Arrancar motor</button><button id="btnDemo">▶ Demo</button></div><label class="volume">Volumen<input type="range" id="vol" min="0" max="1" step="0.01" value="0.6"></label><p class="hint" id="audioStatus" aria-live="polite">Audio continuo · listo al arrancar</p><p id="gpsDetail" class="muted" role="status" aria-live="polite" hidden></p><button id="retryGps" type="button" hidden>Reintentar GPS</button><div class="settings"><label><input type="checkbox" id="revHold" checked>Acelerar en parado</label><label><input type="checkbox" id="autoplay" checked>Recordar motor</label></div></div>
 <div class="control-box"><div class="control-heading"><span class="micro">PEDALERA</span><span class="micro">PULSA MÁS ABAJO = MÁS GAS</span></div><div class="pedals"><button type="button" class="pedal" id="pBrk"><i id="iBrk"></i><span>FRENO<small>↓ / S</small></span></button><button type="button" class="pedal" id="pThr"><i id="iThr"></i><span>ACELERADOR<small>SUAVE ARRIBA · A FONDO ABAJO</small></span></button></div><p class="hint" id="modeHint">Test: pulsa más abajo en el pedal para acelerar más. ↑ / W: a fondo · Mayús + ↑: suave.</p></div></section>
 <section class="feedback control-box" aria-label="Valora el sonido"><div><div class="eyebrow">AYUDA A AFINAR EL GARAJE</div><h2>¿Cómo suena?</h2><p>Tu opinión sobre <strong id="ratingEngine">este motor</strong> nos ayuda a mejorar.</p><form id="ratingForm"><div class="rating-stars" role="group" aria-label="Puntuación del motor"><button type="button" data-rating-score="1" aria-label="1 estrella" aria-pressed="false">☆</button><button type="button" data-rating-score="2" aria-label="2 estrellas" aria-pressed="false">☆</button><button type="button" data-rating-score="3" aria-label="3 estrellas" aria-pressed="false">☆</button><button type="button" data-rating-score="4" aria-label="4 estrellas" aria-pressed="false">☆</button><button type="button" data-rating-score="5" aria-label="5 estrellas" aria-pressed="false">☆</button></div><button type="submit" id="submitRating" disabled>Enviar valoración</button><p id="ratingMessage" aria-live="polite">Elige de 1 a 5 estrellas después de escucharlo.</p></form></div><div class="usage-choice"><strong>Estadísticas de uso activas</strong><p>Se registran sesiones, tiempo visible y motores en uso para mejorar EngineSim.</p><small>No se envía tu ubicación. Las valoraciones se guardan al enviarlas. Gratis y sin cuenta.</small></div></section>
-<footer class="foot"><p>Simulación de motor y escape · Gratis y sin registro. En modo GPS, permite la ubicación y mantén la página abierta. Configúralo antes de conducir y usa un volumen que permita oír el tráfico.</p><span class="foot-note">ENGINE SIM · v0.7.0</span></footer></main>
+<footer class="foot"><p>Simulación de motor y escape · Gratis y sin registro. En modo GPS, permite la ubicación y mantén la página abierta. Configúralo antes de conducir y usa un volumen que permita oír el tráfico.</p><span class="foot-note">ENGINE SIM · v0.7.1</span></footer></main>
 <script>
 'use strict';
 const ENGINES={
@@ -245,7 +245,7 @@ function render(){const e=ENGINES[S.engine];$('vKmh').textContent=S.mode==='gps'
 let last=performance.now();function loop(now){const dt=Math.min(.1,(now-last)/1000);last=now;if(S.running){step(dt);updateAudio();}else if(S.mode==='gps'){refreshGps();if(S.gpsOk)S.v+=(S.gpsSpeed-S.v)*(1-Math.exp(-dt/.28));}render();requestAnimationFrame(loop);}requestAnimationFrame(loop);
 function hav(a,b){const R=6371000,r=x=>x*Math.PI/180;const dLat=r(b.lat-a.lat),dLon=r(b.lon-a.lon);const h=Math.sin(dLat/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
 const GPS_FRESH_MS=12000;
-let gpsGeneration=0,gpsSamples=[],gpsZeroMoves=0;
+let gpsGeneration=0,gpsSamples=[],gpsZeroMoves=0,gpsBaseSkew=null;
 function gpsStatus(on,txt,detail=''){
   $('dGps').classList.toggle('on',on);$('tGps').textContent=txt;
   $('gpsDetail').textContent=detail;$('gpsDetail').hidden=S.mode!=='gps';$('retryGps').hidden=S.mode!=='gps';
@@ -256,7 +256,11 @@ function refreshGps(){
 function receiveGps(p){
   const c=p.coords,t=p.timestamp;
   if(!c||!Number.isFinite(c.latitude)||!Number.isFinite(c.longitude)||!Number.isFinite(t))return;
-  if(Date.now()-t>20000){gpsStatus(false,'Esperando ubicación reciente','El navegador ha entregado una posición antigua.');return;}
+  // Some in-car browsers (Tesla) report timestamps offset from their own clock, so never compare the fix
+  // timestamp with Date.now() directly. Learn the constant offset from the first fix and only reject
+  // positions that are much older than that baseline (a cached fix handed back by the browser).
+  const skew=Date.now()-t;if(gpsBaseSkew===null)gpsBaseSkew=skew;
+  if(skew-gpsBaseSkew>20000){gpsStatus(false,'Esperando ubicación reciente','El navegador ha entregado una posición antigua.');return;}
   const last=gpsSamples.at(-1);if(last&&t<=last.t)return;
   const accuracy=Number.isFinite(c.accuracy)?c.accuracy:100;
   const cur={lat:c.latitude,lon:c.longitude,t,accuracy};
@@ -294,13 +298,13 @@ function startGps(force=false){
       S.gpsOk=false;S.gpsAccel=0;
       const messages={1:['Ubicación bloqueada','Permite la ubicación para esta web en el navegador y pulsa Reintentar GPS.'],2:['Ubicación no disponible','El dispositivo no ha podido obtener una posición. Esperando señal; puedes reintentar.'],3:['GPS: esperando señal','No ha llegado una posición a tiempo. La búsqueda continúa; puedes reintentar.']};
       const [title,detail]=messages[err.code]||['GPS no disponible','Pulsa Reintentar GPS para volver a solicitar ubicación.'];gpsStatus(false,title,detail);
-    },{enableHighAccuracy:true,maximumAge:1000,timeout:20000});
+    },{enableHighAccuracy:true,maximumAge:0,timeout:20000});
   }catch{gpsStatus(false,'GPS bloqueado en este navegador','Abre la web directamente, permite la ubicación y pulsa Reintentar GPS.');}
 }
 function stopGps(showStatus=true){
   gpsGeneration++;
   try{if(S.watchId!==null)navigator.geolocation?.clearWatch(S.watchId);}catch{}
-  S.watchId=null;S.gpsOk=false;S.gpsPrev=null;S.gpsMeasured=null;S.gpsAccel=0;S.gpsLastAt=0;S.gpsSpeed=0;gpsSamples=[];gpsZeroMoves=0;
+  S.watchId=null;S.gpsOk=false;S.gpsPrev=null;S.gpsMeasured=null;S.gpsAccel=0;S.gpsLastAt=0;S.gpsSpeed=0;gpsSamples=[];gpsZeroMoves=0;gpsBaseSkew=null;
   if(showStatus)gpsStatus(false,'GPS apagado');
 }
 let wakeLock=null;async function start(){initAudio();await ctx.resume();S.running=true;S.gear=1;S.gearHold=0;S.shiftTime=0;S.demand=0;S.overrun=0;S.lastThrottle=0;resetShiftMemory();if(S.mode==='gps')startGps();try{if('wakeLock'in navigator)wakeLock=await navigator.wakeLock.request('screen');}catch(_){}$('btnStart').textContent='Parar motor';$('btnStart').classList.add('running');$('dEng').classList.add('on');$('tEng').textContent='Motor encendido';S.rpm=ENGINES[S.engine].idle;}
@@ -434,7 +438,7 @@ startPresence(document.getElementById('onlineCount'), {
 </script><script type="module">
 const INGEST_URL='https://ddyztvtbxiajhfodqmhp.supabase.co/functions/v1/enginesim-ingest';
 const INGEST_KEY='sb_publishable_J9z9Tely6RfDrrRxAfOkfw_fTBnsIh_';
-const APP_VERSION='v0.7.0';
+const APP_VERSION='v0.7.1';
 let token;
 const sessionToken=()=>token||(token=Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join(''));
 async function postMetric(payload,keepalive=false){

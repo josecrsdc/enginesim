@@ -32,6 +32,12 @@ now+=6000;t.refreshGps();assert.ok(S.gpsOk,'six second updates remain usable');n
 const old=callbacks.at(-1);t.startGps(true);assert.equal(watchCalls,2);old.ok(position(30));assert.equal(S.gpsOk,false);callbacks.at(-1).ok(position(15));assert.equal(S.gpsSpeed,54);
 callbacks.at(-1).error({code:1});assert.equal(S.gpsOk,false);assert.match(el('tGps').textContent,/bloqueada/);
 t.startGps(true);callbacks.at(-1).ok(position(null,40));assert.equal(S.gpsOk,false);now+=1000;callbacks.at(-1).ok(position(null,40.00018));assert.ok(S.gpsSpeed>60&&S.gpsSpeed<80);assert.match(el('gpsDetail').textContent,/estimada/);
+// In-car browsers (Tesla): timestamps offset from the device clock must NOT block GPS (v0.7.0 regression).
+t.startGps(true);const skewed=(speed,lat=40)=>({timestamp:epoch+now-3600000,coords:{latitude:lat,longitude:-3,speed,accuracy:5}});
+callbacks.at(-1).ok(skewed(20));assert.ok(S.gpsOk,'fix with one-hour clock offset accepted');assert.equal(S.gpsSpeed,72);
+now+=1000;callbacks.at(-1).ok(skewed(25));assert.equal(S.gpsSpeed,90);
+// ...but a cached fix far older than the learned baseline is still rejected.
+now+=1000;callbacks.at(-1).ok({...skewed(10),timestamp:epoch+now-3600000-60000});assert.equal(S.gpsSpeed,90,'cached stale fix ignored');
 // Some devices report speed=0 while positions move: require consecutive evidence before overriding zero.
 t.startGps(true);callbacks.at(-1).ok(position(0,40));now+=1000;callbacks.at(-1).ok(position(0,40.00018));assert.equal(S.gpsSpeed,0);now+=1000;callbacks.at(-1).ok(position(0,40.00036));assert.ok(S.gpsSpeed>60);
 const speedBefore=S.gpsSpeed;callbacks.at(-1).ok({...position(80),timestamp:epoch+now-1000});assert.equal(S.gpsSpeed,speedBefore,'ignore reordered fix');
